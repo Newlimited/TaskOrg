@@ -1,0 +1,7 @@
+<template>
+    <lightning-radio-group name="stage" label="마감 선택!" options={stageOptions} value={selectedStage} onchange={handleStageChange}></lightning-radio-group>
+      <div class ="result">
+         <lightning-button label="확인" variant="brand" onclick ={updateFiled}></lightning-button>
+          <lightning-button label="취소" variant="neutral" onclick ={cancel}></lightning-button>
+      </div>
+    </template>
