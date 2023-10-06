@@ -1,0 +1,18 @@
+<template>
+
+    <lightning-card title="Lead List View Page">
+        <div slot="actions">
+            <lightning-button label="New" onclick={navigateToNewLeadPage}></lightning-button>
+            <lightning-button label="Delete Selected Lead" onclick={deleteSelectedContacts}></lightning-button>
+        </div>
+        <div class="slds-card__body_inner">
+            <p>Selected Leads:{selectedLeads}</p>
+            <div class="slds-grid slds-gutters slds-p-bottom_x-small slds-p-left_x-small">
+                <lightning-input type="search" onchange={handleSearch}></lightning-input>
+            </div>
+            <lightning-datatable key-field="id" data={Lead} columns={cols} onrowselection={handleRowSelection}
+                onrowaction={handleRowAction}>
+            </lightning-datatable>
+        </div>
+    </lightning-card>
+</template>
