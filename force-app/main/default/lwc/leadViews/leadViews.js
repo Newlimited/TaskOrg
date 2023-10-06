@@ -14,9 +14,16 @@ export default class LeadViews extends LightningElement {
 
     cols = COLS;
     leads;
-
     wiredLeads;
 
+    get selectedContactsLen() {
+        if(this.selectedContacts == undefined) return 0;
+        return this.selectedContacts.length
+    }
+    handleRowSelection(event){
+        this.selectedContacts = event.detail.selectedRows;
+    }
+    
     @wire(getLeads)
     contactsWire(result){
     this.wiredLeads = result;
@@ -25,10 +32,11 @@ export default class LeadViews extends LightningElement {
         this.leads = result.data
     }
     if(result.error){
-        console.error(result.error)
+        console.error(result.error);
     }
 
     }
+    recentlyviewdate
     
 
 }
