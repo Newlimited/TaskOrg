@@ -1,4 +1,4 @@
-import { LightningElement } from 'lwc';
+import { LightningElement, wire } from 'lwc';
 import getOpportunities from '@salesforce/apex/oppViewController.getOpportunities';
 import searchOpportunities from '@salesforce/apex/oppViewController.searchOpportunities';
 import deleteOpps from '@salesforce/apex/oppViewController.deleteOpps';
@@ -26,6 +26,7 @@ export default class OppView extends NavigationMixin(LightningElement) {
     wiredOpportunities;
     selectedOpportunities;
     baseDate;
+
     value = 'All';
 
     get options() {
@@ -34,15 +35,52 @@ export default class OppView extends NavigationMixin(LightningElement) {
             { label: 'Recently', value: 'Recently'},
            ];
     }
+    get selectedOpportunitiesLen(){
+        if(this.selectedOpportunities == undefined) return 0;
+        return this.selectedOpportunities.length
+    }
+    @wire(getOpportunities)
+        opportunitiesWire(result){
+            this.wiredOpportunities = result;
+            if(result.data){
+                this.opportunities = result.data.map((row)=>{
+                    return this.mapOpportunities(row);
 
+                })
+                this.baseDate = this.opportunities;
+            }
+            if(result.error){
+                console.error(result.error);
+            }
+        }
+    
+    mapOpportunities(row){
+        var accountName = '';
+        var accountLink = '';
+        var name = '';
+        
+        if(row.AccountId != undefined){
+            accountLink = `/${row.AccountId}`;
+            accountName = row.Account['AccountId'];
+            name = row.opportunities['Name'];
+
+
+        }
+        return {...row,
+            link:`/${row.Name}`,
+            accountLink : accountLink,
+            AccountName : accountName
+        }
+    }
     handleChange(event) {
         this.value = event.detail.value;
         if(value == 'All'){
-            this.opportunities = getOpportunities();
-
-        }else{
-            recentlyView();
-        }
+            this.getOpportunities();
+           
+        }else if(value == 'Recently'){
+            this.recentlyView();
+                   
+    }
     }
 
     async handleSearch(event){
@@ -56,10 +94,7 @@ export default class OppView extends NavigationMixin(LightningElement) {
        }
     }
    
-    get selectedOpportunitiesLen(){
-        if(this.selectedOpportunities == undefined) return 0;
-        return this.selectedOpportunities.length
-    }
+  
 
 
 }
