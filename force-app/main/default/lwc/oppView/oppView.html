@@ -1,0 +1,31 @@
+<template>
+    <lightning-card title="Opportunity List View" icon-name="standard:opportunity">
+        <lightning-combobox style="width:300px; margin-left:10px;"
+        name="Kind Of View"
+        label="Kind Of View"  value={value}
+        placeholder="Select view"
+        options={options}
+        onchange={handleChange} ></lightning-combobox>
+
+<p>선택 값 : {value}</p>
+
+        <div slot ="actions">
+            <lightning-button  label='Create Opportunity'  onclick={handleCreate} >
+            </lightning-button>
+            <lightning-button  label='Delete Opportunity'  onclick={handleOnClick}>
+            </lightning-button>
+        </div>
+        <div class="slds-card__body_inner"><p>Selected Opportunity: {selectedOpportunityLen}</p>
+            <div class="slds-grid slds-gutters slds-p-bottom_x-small slds-p-left_x-small">
+                <lightning-input type="search" onchange={handleSearch}></lightning-input>
+            </div>
+            <lightning-datatable
+                key-field='Id'
+                data={opportunities}
+                columns={cols}
+                onrowselection={handleRowSelection}
+                onrowaction={handleRowAction}
+            ></lightning-datatable>
+        </div>
+    </lightning-card>
+</template>
