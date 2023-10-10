@@ -45,10 +45,21 @@ export default class OppView extends NavigationMixin(LightningElement) {
         }
     }
 
+    async handleSearch(event){
+       if(event.target.value ==""){
+        this.opportunities = this.baseDate;
+       }else if(event.target.value.length > 1){
+        const searchOppos = await searchOpportunities({serachString: event.target.value})
+        this.opportunities = searchOpportunities.map(row =>{
+            return this.mapOpportunities(row);
+        })
+       }
+    }
    
-
     get selectedOpportunitiesLen(){
         if(this.selectedOpportunities == undefined) return 0;
         return this.selectedOpportunities.length
     }
+
+
 }
