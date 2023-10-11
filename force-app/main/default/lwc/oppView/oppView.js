@@ -27,14 +27,14 @@ export default class OppView extends NavigationMixin(LightningElement) {
     selectedOpportunities;
     baseDate;
 
-    value = 'All';
+    // value = 'All';
 
-    get options() {
-        return [
-            { label: 'All', value: 'All' },
-            { label: 'Recently', value: 'Recently'},
-           ];
-    }
+    // get options() {
+    //     return [
+    //         { label: 'All', value: 'All' },
+    //         { label: 'Recently', value: 'Recently'},
+    //        ];
+    // }
     get selectedOpportunitiesLen(){
         if(this.selectedOpportunities == undefined) return 0;
         return this.selectedOpportunities.length
@@ -72,16 +72,16 @@ export default class OppView extends NavigationMixin(LightningElement) {
             AccountName : accountName
         }
     }
-    handleChange(event) {
-        this.value = event.detail.value;
-        if(value == 'All'){
-            this.getOpportunities();
+    // handleChange(event) {
+    //     this.value = event.detail.value;
+    //     if(value == 'All'){
+    //         this.getOpportunities();
            
-        }else if(value == 'Recently'){
-            this.recentlyView();
+    //     }else if(value == 'Recently'){
+    //         this.recentlyView();
                    
-    }
-    }
+    // }
+    // }
 
     async handleSearch(event){
        if(event.target.value ==""){

@@ -8,7 +8,7 @@ public with sharing class oppViewController {
 
     @AuraEnabled(cacheable=True)
     public static List<Opportunity> searchOpportunities(String searchName){
-        List<Opportunity> opps = [SELECT Id, Name FROM Opportunity WHERE Name LIKE '%[searchName]%' LIMIT 1];
+        List<Opportunity> opps = [SELECT Id, Name FROM Opportunity WHERE Name LIKE '%[searchName]%'];
       return opps;
     }
   
