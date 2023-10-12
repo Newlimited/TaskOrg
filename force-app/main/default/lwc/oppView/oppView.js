@@ -130,7 +130,7 @@ export default class OppView extends LightningElement{
     refreshApex(this.opportunities);
 }
 }
-
+//
 
         //     return getOpportunities().then(result => {
         //             this.wiredOpportunities = result;
