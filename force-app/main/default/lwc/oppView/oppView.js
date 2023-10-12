@@ -18,7 +18,8 @@ const COLS =[{label:'Opportunity Name', fieldName: 'link', type:'url',typeAttrib
             {fieldName: "actions", type: 'action', typeAttributes: {rowActions: ACTIONS}}
 ]
 // Opportunity Owner Alias
-//Task2 Test for git push
+//Task2 Test for git push!!!
+// test 222
 export default class OppView extends LightningElement{
 
     cols = COLS;
