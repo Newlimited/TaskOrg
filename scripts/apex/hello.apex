@@ -8,3 +8,9 @@
 string tempvar = 'Enter_your_name_here';
 System.debug('Hello World!');
 System.debug('My name is ' + tempvar);
+
+String searchKeyword = '%ap%';
+System.debug([SELECT Id, Name, AccountId, Amount, StageName, CloseDate, OwnerId, Account.Name 
+      FROM Opportunity WHERE Name LIKE :searchKeyword LIMIT 100]);
+
+      //sfdx excute annonymous APex 테스트시 테스트 할 코드 드래그 

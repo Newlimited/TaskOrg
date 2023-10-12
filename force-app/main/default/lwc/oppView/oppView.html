@@ -1,31 +1,119 @@
 <template>
-    <lightning-card title="Opportunity List View!!" icon-name="standard:opportunity">
-        <lightning-combobox style="width:300px; margin-left:10px;"
+    
+    <lightning-card title="Opportunity List View" icon-name="standard:opportunity">
+        <lightning-combobox style="width:300px; margin-left:10px; display:flexbox"
         name="Kind Of View"
         label="Kind Of View"  value={value}
         placeholder="Select view"
         options={options}
         onchange={handleChange} ></lightning-combobox>
-
-<p>선택 값 : {value}</p>
-
+   
         <div slot ="actions">
-            <lightning-button  label='Create Opportunity'  onclick={handleCreate} >
+            <lightning-button  label='Create Opportunity'  onclick={showModal} >
             </lightning-button>
-            <lightning-button  label='Delete Opportunity'  onclick={handleOnClick}>
+            <lightning-button  label='Delete Selected Opportunity'  onclick={handleCancleSelected}>
             </lightning-button>
         </div>
-        <div class="slds-card__body_inner"><p>Selected Opportunity: {selectedOpportunityLen}</p>
+    </lightning-card>
+        <div class="slds-card__body_inner"><p>Selected Opportunity: {selectedOpportunitiesLen}</p>
             <div class="slds-grid slds-gutters slds-p-bottom_x-small slds-p-left_x-small">
                 <lightning-input type="search" onchange={handleSearch}></lightning-input>
             </div>
             <lightning-datatable
-                key-field='Id'
+                key-field="Id"
                 data={opportunities}
                 columns={cols}
                 onrowselection={handleRowSelection}
                 onrowaction={handleRowAction}
             ></lightning-datatable>
         </div>
-    </lightning-card>
+    <!--모달창 시작 -->
+
+  
+
+   <template if:true={isShowModal}>
+
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+
+        <div class="slds-modal__container">
+
+            <!-- modal header start -->
+
+            <header class="slds-modal__header">
+
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+
+                    <lightning-icon icon-name="utility:close"
+
+                    alternative-text="close"
+
+                    variant="inverse"
+
+                    size="small" ></lightning-icon>
+
+                    <span class="slds-assistive-text">Close</span>
+
+                </button>
+
+          
+                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">새 기회</h2>
+
+            </header>
+
+            <!-- modal body start -->
+
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+
+                <lightning-record-edit-form object-api-name="Opportunity" onsuccess={handleSuccess}>
+
+                    <lightning-messages>
+
+                    </lightning-messages>
+
+                    <lightning-input-field field-name="OwnerId" label="Owner Name">
+
+                    </lightning-input-field>
+
+                    <lightning-input-field field-name="Name" labe= "Opportunity Name">
+
+                    </lightning-input-field>
+
+                    <lightning-input-field field-name="AccountId" label="Account Name">
+
+                    </lightning-input-field>
+
+                    <lightning-input-field field-name="StageName"  label="Stage Name">
+
+                    </lightning-input-field>
+                    
+                    <lightning-input-field field-name="Amount"  label="Amount">
+
+                    </lightning-input-field>
+
+                    <lightning-input-field field-name="CloseDate" label="CloseDate" >
+
+                    </lightning-input-field>
+
+                    <lightning-button class="slds-m-top_small" variant="brand" type="submit"  name="update" label="저장" >
+
+                    </lightning-button>
+
+                    <lightning-button class="slds-m-top_small" variant="" type="submit"  onclick={closeModal} name="update" label="취소">
+
+                    </lightning-button>
+
+                </lightning-record-edit-form>
+
+            </div>
+            <!-- modal footer start-->
+            <footer class="slds-modal__footer">
+            </footer>Save</footer>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+
+
+
+</template>
+    
 </template>
