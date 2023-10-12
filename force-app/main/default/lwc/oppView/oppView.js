@@ -1,9 +1,9 @@
 import { LightningElement, track, wire } from 'lwc';
-import getOpportunities from '@salesforce/apex/oppViewController.getOpportunities';
-import searchOpportunity from '@salesforce/apex/oppViewController.searchOpportunity';
+import getOpportunities from '@salesforce/apex/OppViewController.getOpportunities';
+import searchOpportunity from '@salesforce/apex/OppViewController.searchOpportunity';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import deleteOpps from '@salesforce/apex/oppViewController.deleteOpps';
-import recentlyView from '@salesforce/apex/oppViewController.recentlyView';
+import deleteOpps from '@salesforce/apex/OppViewController.deleteOpps';
+import recentlyView from '@salesforce/apex/OppViewController.recentlyView';
 import { refreshApex } from '@salesforce/apex';
 
 // Opportunity Name , Account Name, Amount, Stage, Close Date, Opportunity Owner Alias

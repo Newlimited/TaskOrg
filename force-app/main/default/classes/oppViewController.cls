@@ -1,6 +1,5 @@
-public with sharing class oppViewController {
-    
-  @AuraEnabled
+public with sharing class OppViewController {
+    @AuraEnabled
   public static List<Opportunity> getOpportunities(){
     return [SELECT Id, Name, AccountId, Amount, StageName, CloseDate, OwnerId, Account.Name  
     FROM Opportunity 
