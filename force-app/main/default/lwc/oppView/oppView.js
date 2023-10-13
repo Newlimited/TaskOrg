@@ -3,9 +3,13 @@ import getOpportunities from '@salesforce/apex/oppViewController.getOpportunitie
 import searchOpportunity from '@salesforce/apex/oppViewController.searchOpportunity';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import deleteOpps from '@salesforce/apex/oppViewController.deleteOpps';
+import createOpps from '@salesforce/apex/oppViewController.createOpps';
 
 import recentlyView from '@salesforce/apex/oppViewController.recentlyView';
 import { refreshApex } from '@salesforce/apex';
+import updateOpps from '@salesforce/apex/oppViewController.updateOpps';
+
+import getOppsInfo from '@salesforce/apex/oppViewController.getOppsInfo';
 
 // Opportunity Name , Account Name, Amount, Stage, Close Date, Opportunity Owner Alias
 // Name, AccountId, Amount, StageName, CloseDate, OwnerId
@@ -30,23 +34,42 @@ export default class OppView extends LightningElement{
     wiredOpportunities;
     selectedOpportunities;
     baseDate;
+
    
-    value = 'All';
+   
+    @track name ='';
+    @track closedate ='';
+    @track ownerId ='';
+    @track stageName ='';
+    @track amount =0;
 
     @track isShowModal = false;
+    @track isShowUpdateModal = false;
 // 모달창 on/off
     showModal(){
         this.isShowModal = true;
     }
+    showUpdateModal(){
+        this.isShowUpdateModal = true;
+    }
+
     closeModal(){
         this.isShowModal = false;
     }
-
+    closeUpdateModal(){
+        this.isShowUpdateModal = false;
+    }
     get options() {
         return [
             { label: 'All', value: 'All' },
             { label: 'Recent', value: 'Recent'},
            ];
+    }
+    get stageOptions() {
+        return [
+            { label: 'Prospecting', value: 'Prospecting' },
+            { label: 'Closed Won', value: 'Closed Won' }
+        ];
     }
    get selectedOpportunitiesLen(){
         if(this.selectedOpportunities == undefined) return 0;
@@ -66,7 +89,7 @@ export default class OppView extends LightningElement{
                 return this.mapOpportunities(row);
             });
     }
-    async searchView(){
+    async searchView(event){
         const searchOppos = await searchOpportunity({searchString: event.target.value});
         this.opportunities = searchOppos.map(row =>{
             return this.mapOpportunities(row);
@@ -93,6 +116,7 @@ export default class OppView extends LightningElement{
             await this.viewRecent();
         }
     }
+   
     
     // searching
     async handleSearch(event){
@@ -118,7 +142,24 @@ export default class OppView extends LightningElement{
     //     })
     // }
     }
-    
+    handleOwnerChange(event){
+        this.ownerId = event.target.value;
+    }
+    handleNameChange(event){
+        this.name = event.target.value;
+    }
+
+    handleAmountChange(event){
+        this.amount = event.target.value;
+    }
+
+    handleDateChange(event){
+        this.closedate = event.target.value;
+    }
+
+
+
+
     // Action 삭제, 수정
   async handleRowAction(event) {
     const selectKey = event.detail.action.key;
@@ -127,7 +168,9 @@ export default class OppView extends LightningElement{
         refreshApex(this.opportunities)})
         this.deleteMsg();
 } else if(selectKey =='edit'){
-    refreshApex(this.opportunities);
+    this.showUpdateModal();
+    
+    
 }
 }
 //
@@ -238,23 +281,66 @@ export default class OppView extends LightningElement{
             new ShowToastEvent({
                 title: 'Success',
                 message: '기회가 삭제되었습니다.',
-                variant: 'remove'
+                variant: 'Sucess'
             })
         );
         this.handleClose();
     }
-    editeMsg(){
+    editeMsg(event){
         this.dispatchEvent(
             new ShowToastEvent({
                 title: 'Success',
                 message: '기회가 업데이트 되었습니다.',
-                variant: 'update'
+                variant: 'Sucess'
             })
         );
-        this.handleClose();
+        this.closeUpdateModal(evnet);
+        this.handleClose(event);
     }
 //새로고침
     handleClose = () => {
         window.location.reload();
     }
-}
+
+    getRecordsForUpdate(){
+     getOppsInfo().then((result)=>{
+            this.name = result.name;
+            this.closedate = result.closeDate;
+            this.amount = resutl.amount;
+            this.stageName = result.stageName;
+        });
+       
+    }
+
+    handleStageChange(event) {
+        const stageName = event.detail.value;
+        console.log('stageName check : ', stageName);
+        this.stageName = stageName;
+    }
+
+    createRecord(){
+       createOpps({
+        // ownerId : this.ownerId,
+        name : this.name,
+        closeDate : this.closedate,
+        stageName : this.stageName,
+        amount : this.amount
+       });
+       this.handleSuccess();
+    }
+    updateRecord(){
+        this.getRecordsForUpdate().then(()=>{
+        updateOpps({
+            name : this.name,
+        closeDate : this.closedate,
+        stageName : this.stageName,
+        amount : this.amount
+        });
+    });
+        this.editeMsg();
+
+    }
+          
+       
+    }
+

@@ -28,12 +28,12 @@
             onrowaction={handleRowAction}
             ></lightning-datatable>
         </div>
-    <!--모달창 시작 -->
-   <template if:true={isShowModal}>
 
+
+   <!--<template if:true={isShowModal}>
     <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
         <div class="slds-modal__container">
-            <!-- modal header start -->
+           
             <header class="slds-modal__header">
                 <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
                     <lightning-icon icon-name="utility:close"
@@ -44,58 +44,107 @@
                 </button>
                 <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">새 기회</h2>
             </header>
-            <!-- modal body start -->
-            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-                <lightning-record-edit-form object-api-name="Opportunity" onsuccess={handleSuccess}>
+            
+            <body class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                 <lightning-record-edit-form object-api-name="Opportunity" onsuccess={handleSuccess}> 
+                    <lightning-record-form object-api-name="Opportunity" onsuccess={handleSuccess}> 
 
-                    <lightning-messages>
-
-                    </lightning-messages>
-
-                    <lightning-input-field field-name="OwnerId" label="Owner Name">
-
-                    </lightning-input-field>
-
+                    <lightning-output-field field-name="OwnerId" label="Owner Name">
+                    </lightning-output-field>
                     <lightning-input-field field-name="Name" labe= "Opportunity Name">
-
                     </lightning-input-field>
-
                     <lightning-input-field field-name="AccountId" label="Account Name">
-
                     </lightning-input-field>
-
                     <lightning-input-field field-name="StageName"  label="Stage Name">
-
                     </lightning-input-field>
-                    
                     <lightning-input-field field-name="Amount"  label="Amount">
-
                     </lightning-input-field>
-
                     <lightning-input-field field-name="CloseDate" label="CloseDate" >
-
                     </lightning-input-field>
-
                     <lightning-button class="slds-m-top_small" variant="brand" type="submit"  name="update" label="저장" >
-
                     </lightning-button>
-
                     <lightning-button class="slds-m-top_small" variant="" type="submit"  onclick={closeModal} name="update" label="취소">
 
                     </lightning-button>
-
+                </lightning-record-form >
                 </lightning-record-edit-form>
 
-            </div>
-            <!-- modal footer start-->
+            </body>
             <footer class="slds-modal__footer">
             </footer>Save</footer>
         </div>
     </section>
     <div class="slds-backdrop slds-backdrop_open"></div>
+</template>-->
+
+    <!-- <lightning-button label="Open Modal" onclick={openModal}></lightning-button> -->
+  
+    <template if:true={isShowModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                 aria-describedby="modal-content-id-1"
+                 class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close"
+                        alternative-text="close"
+                        variant="inverse"
+                        size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">새 기회</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    
+                    <!-- <lightning-input label="ownerId" type ="text" field-name ={ownerId} onchange={handleOwnerChange}></lightning-input> -->
+                    <lightning-input label="Name" type ="text" field-name ={name} onchange={handleNameChange} required="true" ></lightning-input>
+                    <lightning-input label="Amount" type ="Currency" field-name ={amount} onchange={handleAmountChange}></lightning-input>
+                    <lightning-input label="close Date" type ="Date" field-name ={closeDate} onchange={handleDateChange} value ={today} required="true" ></lightning-input>
+                    <lightning-combobox label="Stage Name" value ={value}  options={stageOptions} onchange={handleStageChange} required="true" 
+                    ></lightning-combobox>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button label="Cancel" onclick={closeModal}></lightning-button>
+                    <lightning-button variant="brand" label="Save" onclick={createRecord}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
 
 
+<!--미완성-->
+<template if:true={isShowUpdateModal}>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <!-- modal header start -->
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeUpdateModal}>
+                    <lightning-icon icon-name="utility:close"
+                    alternative-text="close"
+                    variant="inverse"
+                    size="small" ></lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">기회 수정</h2>
+            </header>
+            <!-- modal body start -->
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                <lightning-input label="Name" type ="text" field-name ={name} onchange={handleNameChange} required="true" ></lightning-input>
+                <lightning-input label="Amount" type ="Currency" field-name ={amount} onchange={handleAmountChange}></lightning-input>
+                <lightning-input label="close Date" type ="Date" field-name ={closeDate} onchange={handleDateChange} value ={today} required="true" ></lightning-input>
+                <lightning-combobox label="Stage Name" value ={value}  options={stageOptions} onchange={handleStageChange} required="true" 
+                ></lightning-combobox>
 
-</template>
-    
+            </div>
+            <!-- modal footer start-->
+            <footer class="slds-modal__footer">
+                <lightning-button label="Cancel" onclick={closeModal}></lightning-button>
+                <lightning-button variant="brand" label="Save" onclick={updateRecord}></lightning-button>
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+
+</template>    
 </template>
