@@ -113,9 +113,9 @@
     </template>
 
 
-<!--미완성-->
+<!--Update-->
 <template if:true={isShowUpdateModal}>
-    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-02" aria-modal="true" aria-describedby="modal-content-id-2" class="slds-modal slds-fade-in-open">
         <div class="slds-modal__container">
             <!-- modal header start -->
             <header class="slds-modal__header">
@@ -129,17 +129,18 @@
                 <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">기회 수정</h2>
             </header>
             <!-- modal body start -->
-            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
-                <lightning-input label="Name" type ="text" field-name ={name} onchange={handleNameChange} required="true" ></lightning-input>
-                <lightning-input label="Amount" type ="Currency" field-name ={amount} onchange={handleAmountChange}></lightning-input>
-                <lightning-input label="close Date" type ="Date" field-name ={closeDate} onchange={handleDateChange} value ={today} required="true" ></lightning-input>
+            <div class="slds-modal__content slds-p-around_medium" id={id}>
+                <lightning-output-field label = "Owner" type = "OwnerId" field-name ={ownerId} value =[ownerId]></lightning-output-field>
+                <lightning-input label="Name" type ="Text" field-name ={name} onchange={handleNameChange} value={name} required="true" disabled="true" ></lightning-input>
+                <lightning-input label="Amount" type ="Currency" field-name ={amount} onchange={handleAmountChange} value={amount} ></lightning-input>
+                <lightning-input label="close Date" type ="Date" field-name ={closeDate} onchange={handleDateChange} value ={closeDate}  required="true" ></lightning-input>
                 <lightning-combobox label="Stage Name" value ={value}  options={stageOptions} onchange={handleStageChange} required="true" 
                 ></lightning-combobox>
 
             </div>
             <!-- modal footer start-->
             <footer class="slds-modal__footer">
-                <lightning-button label="Cancel" onclick={closeModal}></lightning-button>
+                <lightning-button label="Cancel" onclick={closeUpdateModal}></lightning-button>
                 <lightning-button variant="brand" label="Save" onclick={updateRecord}></lightning-button>
             </footer>
         </div>

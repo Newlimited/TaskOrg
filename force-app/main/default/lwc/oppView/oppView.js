@@ -7,9 +7,9 @@ import createOpps from '@salesforce/apex/oppViewController.createOpps';
 
 import recentlyView from '@salesforce/apex/oppViewController.recentlyView';
 import { refreshApex } from '@salesforce/apex';
-import updateOpps from '@salesforce/apex/oppViewController.updateOpps';
 
 import getOppsInfo from '@salesforce/apex/oppViewController.getOppsInfo';
+import updateOpp from '@salesforce/apex/oppViewController.updateOpp';
 
 // Opportunity Name , Account Name, Amount, Stage, Close Date, Opportunity Owner Alias
 // Name, AccountId, Amount, StageName, CloseDate, OwnerId
@@ -38,9 +38,6 @@ export default class OppView extends LightningElement{
    
    
     @track name ='';
-    @track closedate ='';
-    @track ownerId ='';
-    @track stageName ='';
     @track amount =0;
 
     @track isShowModal = false;
@@ -141,10 +138,14 @@ export default class OppView extends LightningElement{
     //         return this.mapOpportunities(row);
     //     })
     // }
-    }
-    handleOwnerChange(event){
-        this.ownerId = event.target.value;
-    }
+    
+}
+checkChangeContents(event){
+    handleNameChange(event);
+    handleAmountChange(event);
+    handleDateChange(event);
+    handleStageChange(event);
+}
     handleNameChange(event){
         this.name = event.target.value;
     }
@@ -156,20 +157,25 @@ export default class OppView extends LightningElement{
     handleDateChange(event){
         this.closedate = event.target.value;
     }
-
-
-
-
     // Action 삭제, 수정
   async handleRowAction(event) {
     const selectKey = event.detail.action.key;
     if(selectKey == 'delete'){
-  await deleteOpps({opportunityIds : [event.detail.row.Id]}).then(() => {
+   deleteOpps({opportunityIds : event.detail.row.Id}).then(() => {
         refreshApex(this.opportunities)})
         this.deleteMsg();
 } else if(selectKey =='edit'){
-    this.showUpdateModal();
+  
+   const result = await getOppsInfo({oppId: event.detail.row.Id});
+        console.log('result.Id'+ result.Id);
+        this.id = result.Id;
+        this.name = result.Name;
+        this.amount = result.Amount;
+        this.closeDate = result.CloseDate;
     
+    console.log('mapping start');
+    this.showUpdateModal();
+   console.log('show');
     
 }
 }
@@ -286,7 +292,7 @@ export default class OppView extends LightningElement{
         );
         this.handleClose();
     }
-    editeMsg(event){
+    updateMsg(event){
         this.dispatchEvent(
             new ShowToastEvent({
                 title: 'Success',
@@ -301,17 +307,6 @@ export default class OppView extends LightningElement{
     handleClose = () => {
         window.location.reload();
     }
-
-    getRecordsForUpdate(){
-     getOppsInfo().then((result)=>{
-            this.name = result.name;
-            this.closedate = result.closeDate;
-            this.amount = resutl.amount;
-            this.stageName = result.stageName;
-        });
-       
-    }
-
     handleStageChange(event) {
         const stageName = event.detail.value;
         console.log('stageName check : ', stageName);
@@ -328,19 +323,16 @@ export default class OppView extends LightningElement{
        });
        this.handleSuccess();
     }
-    updateRecord(){
-        this.getRecordsForUpdate().then(()=>{
-        updateOpps({
+
+    updateRecord(event){
+        updateOpp({
+            oopId : this.id,
             name : this.name,
-        closeDate : this.closedate,
-        stageName : this.stageName,
-        amount : this.amount
+            closeDate : this.closedate,
+            stageName : this.stageName,
+            amount : this.amount
         });
-    });
-        this.editeMsg();
-
+        this.updateMsg();
+    
     }
-          
-       
-    }
-
+}
