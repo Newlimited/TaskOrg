@@ -16,18 +16,18 @@
             </lightning-button>
         </div>
     </lightning-card>
-        <div><h1>Selected Opportunity: {selectedOpportunitiesLen}</h1>
-            <div class="slds-grid slds-gutters slds-p-bottom_x-small slds-p-left_x-small">
-                <lightning-input type="search" onchange={handleSearch}></lightning-input>
-            </div>
-            <lightning-datatable
+    <div class="slds-card__body_inner"><p>Selected Opportunity: {selectedOpportunitiesLen}</p>
+        <div class="slds-grid slds-gutters slds-p-bottom_x-small slds-p-left_x-small">
+            <lightning-input type="search" onchange={handleSearch}></lightning-input>
+        </div>
+        <lightning-datatable
             key-field="Id"
             data={opportunities}
             columns={cols}
             onrowselection={handleRowSelection}
             onrowaction={handleRowAction}
-            ></lightning-datatable>
-        </div>
+        ></lightning-datatable>
+    </div>
 
 
    <!--<template if:true={isShowModal}>
@@ -130,7 +130,6 @@
             </header>
             <!-- modal body start -->
             <div class="slds-modal__content slds-p-around_medium" id={id}>
-                <lightning-output-field label = "Owner" type = "OwnerId" field-name ={ownerId} value =[ownerId]></lightning-output-field>
                 <lightning-input label="Name" type ="Text" field-name ={name} onchange={handleNameChange} value={name} required="true" disabled="true" ></lightning-input>
                 <lightning-input label="Amount" type ="Currency" field-name ={amount} onchange={handleAmountChange} value={amount} ></lightning-input>
                 <lightning-input label="close Date" type ="Date" field-name ={closeDate} onchange={handleDateChange} value ={closeDate}  required="true" ></lightning-input>

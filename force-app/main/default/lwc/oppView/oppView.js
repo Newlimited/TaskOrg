@@ -89,13 +89,12 @@ export default class OppView extends LightningElement{
                 return this.mapOpportunities(row);
             });
     }
-    async searchView(event){
+    async searchView(){
         const searchOppos = await searchOpportunity({searchString: event.target.value});
         this.opportunities = searchOppos.map(row =>{
             return this.mapOpportunities(row);
         });
     }
-
 
     // 리스트 필터
     async handleChange(event){
