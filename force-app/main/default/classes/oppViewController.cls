@@ -2,9 +2,7 @@ public with sharing class oppViewController {
     
     @AuraEnabled
     public static Opportunity getOppsInfo(String oppId){
-    
-      system.debug(oppId);
-      Opportunity getInfo;
+       Opportunity getInfo;
       
         getInfo = [SELECT Id, Name, AccountId, Amount, StageName, CloseDate, OwnerId, Account.Name FROM Opportunity WHERE Id =:oppId];
         System.debug('getInfo'+ getInfo);
@@ -78,8 +76,8 @@ public with sharing class oppViewController {
           }
   
           @AuraEnabled
-          public static void updateOpp(Id oppId, String name, Date closeDate, String stageName, Decimal amount){
-            system.debug('START UPDATE Opps');
+          public static void updateOpp(Id oppId, Date closeDate, String stageName, Decimal amount){
+            system.debug('START UPDATE Opps, Ids ::'+ oppId );
             Opportunity updateRecordOpp = [SELECT Id, name, accountId, amount, stageName, closeDate, ownerId, account.Name
             FROM Opportunity WHERE Id =:oppId];
             try{

@@ -33,13 +33,9 @@ export default class OppView extends LightningElement{
     opportunities;
     wiredOpportunities;
     selectedOpportunities;
-    baseDate;
-
-   
-   
+    // baseDate;
     @track name ='';
     @track amount =0;
-
     @track isShowModal = false;
     @track isShowUpdateModal = false;
 // 모달창 on/off
@@ -56,6 +52,12 @@ export default class OppView extends LightningElement{
     closeUpdateModal(){
         this.isShowUpdateModal = false;
     }
+    //connectCallback
+    async connectedCallback() { // 비동기
+        await this.viewAll();
+      }
+
+      //ComboBox Options
     get options() {
         return [
             { label: 'All', value: 'All' },
@@ -68,6 +70,7 @@ export default class OppView extends LightningElement{
             { label: 'Closed Won', value: 'Closed Won' }
         ];
     }
+    // Select Count
    get selectedOpportunitiesLen(){
         if(this.selectedOpportunities == undefined) return 0;
         return this.selectedOpportunities.length
@@ -93,10 +96,7 @@ export default class OppView extends LightningElement{
         });
     }
 
- async connectedCallback() { // 비동기
-   await this.viewAll();
 
- }
     // 리스트 필터
     async handleChange(event){
        this.value = event.detail.value;
@@ -107,13 +107,11 @@ export default class OppView extends LightningElement{
             //     return this.mapOpportunities(row);
             // });
             // console.log('result: ', result);
-
         }
         else if(this.value =='Recent'){
             await this.viewRecent();
         }
     }
-   
     
     // searching
     async handleSearch(event){
@@ -128,7 +126,6 @@ export default class OppView extends LightningElement{
             //     return this.mapOpportunities(row);
             // });
         }
-
     //     if(event.target.value == ""){
     //     this.opportunities = this.baseDate
     //    }else if(event.target.value.length > 1){
@@ -140,12 +137,7 @@ export default class OppView extends LightningElement{
     // }
     
 }
-checkChangeContents(event){
-    handleNameChange(event);
-    handleAmountChange(event);
-    handleDateChange(event);
-    handleStageChange(event);
-}
+    // Check Change
     handleNameChange(event){
         this.name = event.target.value;
     }
@@ -157,11 +149,17 @@ checkChangeContents(event){
     handleDateChange(event){
         this.closedate = event.target.value;
     }
+    handleStageChange(event) {
+        const stageName = event.detail.value;
+        console.log('stageName check : ', stageName);
+        this.stageName = stageName;
+    }
+   
     // Action 삭제, 수정
   async handleRowAction(event) {
-    const selectKey = event.detail.action.key;
-    if(selectKey == 'delete'){
-   deleteOpps({opportunityIds : event.detail.row.Id}).then(() => {
+     const selectKey = event.detail.action.key;
+     if(selectKey == 'delete'){
+     deleteOpps({opportunityIds : event.detail.row.Id}).then(() => {
         refreshApex(this.opportunities)})
         this.deleteMsg();
 } else if(selectKey =='edit'){
@@ -172,7 +170,6 @@ checkChangeContents(event){
         this.name = result.Name;
         this.amount = result.Amount;
         this.closeDate = result.CloseDate;
-    
     console.log('mapping start');
     this.showUpdateModal();
    console.log('show');
@@ -256,6 +253,8 @@ checkChangeContents(event){
             AccountName : accountName
         };
     }
+
+    //Page 이동
     // navigateToNewRecordPage() {
     //     this[NavigationMixin.Navigate]({
     //         type: 'standard__objectPage',
@@ -265,7 +264,6 @@ checkChangeContents(event){
     //         }
     //     });
     // }
-
     
     handleRowSelection(event){
         this.selectedOpportunities = event.detail.selectedRows;
@@ -287,7 +285,7 @@ checkChangeContents(event){
             new ShowToastEvent({
                 title: 'Success',
                 message: '기회가 삭제되었습니다.',
-                variant: 'Sucess'
+                variant: 'Success'
             })
         );
         this.handleClose();
@@ -297,21 +295,17 @@ checkChangeContents(event){
             new ShowToastEvent({
                 title: 'Success',
                 message: '기회가 업데이트 되었습니다.',
-                variant: 'Sucess'
+                variant: 'Success'
             })
         );
-        this.closeUpdateModal(evnet);
+        this.closeUpdateModal(event);
         this.handleClose(event);
     }
 //새로고침
     handleClose = () => {
         window.location.reload();
     }
-    handleStageChange(event) {
-        const stageName = event.detail.value;
-        console.log('stageName check : ', stageName);
-        this.stageName = stageName;
-    }
+ 
 
     createRecord(){
        createOpps({
@@ -324,11 +318,10 @@ checkChangeContents(event){
        this.handleSuccess();
     }
 
-    updateRecord(event){
+    updateRecord(){
         updateOpp({
-            oopId : this.id,
-            name : this.name,
-            closeDate : this.closedate,
+            oppId : this.id,
+            closeDate : this.closeDate,
             stageName : this.stageName,
             amount : this.amount
         });
