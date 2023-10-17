@@ -1,4 +1,4 @@
-import { LightningElement, track, wire } from 'lwc';
+import { LightningElement, track } from 'lwc';
 import getOpportunities from '@salesforce/apex/oppViewController.getOpportunities';
 import searchOpportunity from '@salesforce/apex/oppViewController.searchOpportunity';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';

@@ -3,10 +3,15 @@ public with sharing class oppViewController {
     @AuraEnabled
     public static Opportunity getOppsInfo(String oppId){
        Opportunity getInfo;
+       
+      
         getInfo = [SELECT Id, Name, AccountId, Amount, StageName, CloseDate, OwnerId, Account.Name FROM Opportunity WHERE Id =:oppId];
         System.debug('getInfo'+ getInfo);
         return getInfo;
-    }    
+    }
+    
+    
+    
     
     @AuraEnabled
       public static List<Opportunity> getOpportunities(){
@@ -24,14 +29,13 @@ public with sharing class oppViewController {
       // wire를 쓰지 않을 때는 caheable을 지워준다. => 계속 값이 변경 될때 마다 실행시키기 때문에.
     
       @AuraEnabled
-      public static List<Opportunity> searchOpportunity(String searchString){
-        String searchKeyword = '%' + searchString + '%';
-        List<Opportunity> resultSearch =[SELECT Id, Name, AccountId, Amount, StageName, CloseDate, OwnerId, Account.Name 
-        FROM Opportunity WHERE Name LIKE :searchKeyword LIMIT 100];
-        
-        return resultSearch;
-      }  
+        public static List<Opportunity> searchOpportunity(String searchString){
+          String searchKeyword = '%' + searchString + '%';
+          List<Opportunity> resultSearch =[SELECT Id, Name, AccountId, Amount, StageName, CloseDate, OwnerId, Account.Name 
+          FROM Opportunity WHERE Name LIKE :searchKeyword LIMIT 100];
           
+          return resultSearch;
+        }  
       @AuraEnabled
       public static List<Opportunity> recentlyView(){
         List<Opportunity> recentOpps = [SELECT Id, name, accountId, amount, stageName, closeDate, ownerId, account.Name 
@@ -46,12 +50,14 @@ public with sharing class oppViewController {
                   oppsInfos.add(new Opportunity(Id = oppsInfo));
               }
               if(!oppsInfos.isEmpty()) delete oppsInfos;
+              
   
           }
           @AuraEnabled
           public static void createOpps(String name, Date closeDate, String stageName, Decimal amount){
             system.debug('START CreateOpps');
             try {
+              
               Opportunity newRecordOpp = new Opportunity();
               // newRecordOpp.put('Name', name);
               // newRecordOpp.put('CloseDate', closeDate);
